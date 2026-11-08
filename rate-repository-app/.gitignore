@@ -41,4 +41,4 @@ yarn-error.*
 /android
 
 # development server
-/rate-repository-api
+rate-repository-api/
