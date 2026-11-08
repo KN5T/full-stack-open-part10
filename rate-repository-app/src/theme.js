@@ -4,12 +4,13 @@ const theme = {
     colors: {
         textPrimary: '#24292e',
         textSecondary: '#586069',
+        textTertiary: '#ffffff',
         textAppBar: '#ffffff',
-        primary: '#0366d6',
+        primary: '#0366d6'
     },
     fontSizes: {
         body: 17,
-        subheading: 22,
+        subheading: 20,
     },
     fonts: {
         main: Platform.select({

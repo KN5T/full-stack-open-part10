@@ -3,6 +3,8 @@ import Text from './Text';
 import { useFormik } from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';
+import useSingIn from '../hooks/useSingIn';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
     container: {
@@ -29,11 +31,7 @@ const validationSchema = yup.object().shape({
     password: yup.string().required("Password is required")
 })
 
-const SignIn = () => {
-    const onSubmit = (values) => {
-        console.log(values);
-    };
-
+export const SingInContainer = ({ onSubmit }) => {
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -83,6 +81,28 @@ const SignIn = () => {
                 <Text style={{ color: "#ffffff" }} fontWeight="bold" >Sign in</Text>
             </Pressable>
         </View>
+    )
+}
+
+const SignIn = () => {
+
+    const [signIn] = useSingIn();
+    const navige = useNavigate()
+
+    const onSubmit = async (values) => {
+        const { username, password } = values
+
+        try {
+            const { data } = await signIn({ username, password })
+            console.log("data", data)
+            navige("/")
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    return (
+        <SingInContainer onSubmit={onSubmit} />
     );
 };
 
