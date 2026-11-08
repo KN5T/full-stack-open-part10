@@ -1,9 +1,9 @@
 import Text from "./Text"
 import { Link } from "react-router-native";
 
-const AppBarTab = ({ name, path, handlePress }) => {
+const AppBarTab = ({ name, path }) => {
     return (
-        <Link to={path} onPress={handlePress} >
+        <Link to={path} >
             <Text isAppBar>{name}</Text>
         </Link >
     )

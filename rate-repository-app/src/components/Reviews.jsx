@@ -24,6 +24,7 @@ const Reviews = () => {
                 renderItem={({ item }) => <ReviewItem review={item} refetchReviews={refetch} showButtons />}
                 keyExtractor={({ id }) => id}
                 ItemSeparatorComponent={ItemSeparator}
+                contentContainerStyle={{ paddingBottom: 100 }}
             />
         </View>
     )

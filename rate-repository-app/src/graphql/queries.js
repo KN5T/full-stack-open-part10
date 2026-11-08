@@ -25,14 +25,20 @@ export const GET_USER = gql`
 `
 
 export const GET_REPOSITORY = gql`
-  query Repository($repositoryId: ID!) {
+  query Repository($repositoryId: ID!, $reviewsFirst: Int, $reviewsAfter: String) {
     repository(id: $repositoryId) {
       ...RepositoryFragment
-      reviews {
+      reviews(first: $reviewsFirst, after: $reviewsAfter) {
         edges {
           node {
             ...ReviewFragment
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
     }
@@ -42,13 +48,18 @@ export const GET_REPOSITORY = gql`
 `
 
 export const GET_REPOSITORIES = gql`
-  query Repositories($orderDirection: OrderDirection, $orderBy: AllRepositoriesOrderBy, $searchKeyword: String) {
-    repositories(orderDirection: $orderDirection, orderBy: $orderBy, searchKeyword: $searchKeyword) {
+  query Repositories($orderDirection: OrderDirection, $orderBy: AllRepositoriesOrderBy, $searchKeyword: String, $after: String, $first: Int) {
+    repositories(orderDirection: $orderDirection, orderBy: $orderBy, searchKeyword: $searchKeyword, after: $after, first: $first) {
       edges {
         node {
           ...RepositoryFragment
         }
         cursor
+      }
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
       }
     }
   }

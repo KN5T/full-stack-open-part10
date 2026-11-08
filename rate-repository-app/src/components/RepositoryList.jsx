@@ -43,7 +43,7 @@ const FilterSelect = ({ selected, setSelected, searchQuery, setSearchQuery }) =>
     )
 }
 
-export const RepositoryListContainer = ({ repositories, selected, setSelected, searchQuery, setSearchQuery }) => {
+export const RepositoryListContainer = ({ repositories, onEndReached, selected, setSelected, searchQuery, setSearchQuery }) => {
     const repositoryNodes = repositories
         ? repositories.edges.map((edge) => edge.node)
         : [];
@@ -55,6 +55,8 @@ export const RepositoryListContainer = ({ repositories, selected, setSelected, s
             ItemSeparatorComponent={ItemSeparator}
             renderItem={({ item }) => <RepositoryItem repository={item} />}
             keyExtractor={item => item.id}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
         />
     );
 };
@@ -75,7 +77,7 @@ const options = {
 }
 
 const RepositoryList = () => {
-    const { repositories, loading, refetch } = useRepositories();
+    const { repositories, loading, refetch, fetchMore } = useRepositories({ first: 8 });
     const [selected, setSelected] = useState("latest")
     const [searchQuery, setSearchQuery] = useState("")
     const [debouncedValue] = useDebounce(searchQuery, 500)
@@ -96,15 +98,13 @@ const RepositoryList = () => {
 
     }, [selected, debouncedValue, refetch])
 
-    if (loading) {
-        return (
-            <Text>Loading...</Text>
-        )
+    if (loading && !repositories) {
+        return <Text>Loading...</Text>
     }
-
 
     return <RepositoryListContainer
         repositories={repositories}
+        onEndReached={fetchMore}
         selected={selected}
         setSelected={setSelected}
         searchQuery={searchQuery}

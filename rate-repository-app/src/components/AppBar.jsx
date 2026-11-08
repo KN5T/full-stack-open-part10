@@ -4,6 +4,8 @@ import AppBarTab from './AppBarTab';
 import { useApolloClient, useQuery } from '@apollo/client/react';
 import { GET_USER } from '../graphql/queries';
 import useAuthStorage from '../hooks/useAuthStorage';
+import { useNavigate } from 'react-router-native';
+import Text from './Text';
 
 const styles = StyleSheet.create({
     container: {
@@ -21,13 +23,15 @@ const AppBar = () => {
     const { data } = useQuery(GET_USER)
     const authStorage = useAuthStorage()
     const apolloClient = useApolloClient()
+    const navigate = useNavigate();
 
     const user = (data && data.me) ? data.me : null
 
     const signOut = async () => {
-        await authStorage.removeAccessToken()
-        apolloClient.resetStore()
-    }
+        await authStorage.removeAccessToken();
+        await apolloClient.resetStore();
+        navigate('/');
+    };
 
     return (
         <View style={styles.container}>
@@ -52,9 +56,11 @@ const AppBar = () => {
                     <AppBarTab name="My reviews" path="/reviews" />
                 </Pressable>}
 
-                {user && <Pressable style={styles.item} onPress={() => console.log("You pressed me")}>
-                    <AppBarTab name="Sing out" path="/" handlePress={signOut} />
-                </Pressable>}
+                {user && (
+                    <Pressable style={styles.item} onPress={signOut}>
+                        <Text isAppBar>Sign out</Text>
+                    </Pressable>
+                )}
             </ScrollView>
         </View >
     )
